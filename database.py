@@ -64,12 +64,13 @@ class Database:
         return insert_result
 
     @staticmethod
-    def update_document(collection_name, document):
+    def update_document(collection_name, filter, document):
         """Update a document in a specific collection"""
         if Database.db is None:
             raise Exception("Database is not connected. Call init_database() first.")
 
         collection = Database.db[collection_name]
-        update_result = collection.update_one(document)
-        print(f"Inserted document ID: {update_result.inserted_id}")
+        update = {"$set": document}
+        update_result = collection.update_one(filter, update)
+        print(f"Inserted document ID: {update_result}")
         return update_result

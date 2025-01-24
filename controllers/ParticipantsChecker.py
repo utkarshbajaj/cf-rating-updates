@@ -25,6 +25,9 @@ class ParticipantsChecker:
         """Check if a user in the database is a particiapnt in the contest"""
 
         # TODO: Do we have to do this everytime?
+        # Ideally we should do it everytime because there might be new users
+        # But, there should be a way for checking that and storing the old ones.
+        # (over engineering for this problem?)
         documents = Database.get_all_documents("users")
 
         app_users = {}

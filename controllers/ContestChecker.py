@@ -27,8 +27,19 @@ class ContestChecker:
 
         for i in range(0, num_contests, 1):
             contest = results[i]
-            if contest["id"] <= last_update["contest_number"]:
+            if (
+                contest["id"] <= last_update["contest_number"]
+                and contest["phase"] == "FINISHED"
+            ):
                 break
 
             if contest["phase"] == "FINISHED":
+                # This should eventually be a multithreaded call if required?
                 ParticipantsChecker.check_participants(contest["id"])
+                # print(contest["id"])
+
+                # At this point, I am assuming that the emails have been sent successfully, if any
+                if contest["id"] > last_update["contest_number"]:
+                    document = {"contest_number": contest["id"]}
+                    fil = {"key": "last_update"}
+                    Database.update_document("contests", fil, document)
